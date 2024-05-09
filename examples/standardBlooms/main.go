@@ -17,7 +17,7 @@ func main() {
 		value := uuid.NewString()
 		bloomInput, _ := json.Marshal(value)
 		fmt.Printf("\n key : [%v] inserted \n", value)
-		ft.InsertAt(bloomInput)
+		ft.Flush(bloomInput)
 		input = append(input, value)
 	}
 

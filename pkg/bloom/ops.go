@@ -1,6 +1,6 @@
 package bloom
 
-func (f *Filter) InsertAt(v []byte) {
+func (f *Filter) Flush(v []byte) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 
