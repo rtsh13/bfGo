@@ -8,14 +8,14 @@ import (
 
 func fnv1a(v []byte) uint64 {
 	h := fnv.New64a()
-	_, _ = h.Write(v)
+	h.Write(v)
 
 	return h.Sum64()
 }
 
 func murmum3_128(v []byte) (uint64, uint64) {
 	h := murmur3.New128()
-	_, _ = h.Write(v)
+	h.Write(v)
 
 	return h.Sum128()
 }
