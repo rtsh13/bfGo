@@ -7,13 +7,13 @@ import (
 )
 
 type Filter struct {
-	mu   sync.Mutex
-	size uint
-	bSet *bitset.BitSet
+	mu     sync.Mutex     // exclusive lock for reads and writes
+	size   uint           // length of the bucket
+	bucket *bitset.BitSet // equivalent hashmap
 }
 
 func New(options ...func(*Filter)) *Filter {
-	bf := &Filter{}
+	bf := &Filter{mu: sync.Mutex{}, size: 0, bucket: nil}
 
 	for _, apply := range options {
 		apply(bf)
@@ -25,8 +25,7 @@ func New(options ...func(*Filter)) *Filter {
 func WithSize(n uint) func(*Filter) {
 	return func(f *Filter) {
 		f.size = n
-		f.mu = sync.Mutex{}
 		bSet := bitset.New(n)
-		f.bSet = bSet
+		f.bucket = bSet
 	}
 }
