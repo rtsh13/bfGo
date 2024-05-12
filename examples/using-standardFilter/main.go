@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	bloomFt "github.com/rtsh13/bfGo/pkg/bloom"
+	bloomFt "github.com/rtsh13/bfGo/bloomFilter"
 )
 
 func main() {
