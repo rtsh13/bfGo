@@ -1,0 +1,182 @@
+run:
+  deadline: 5m
+
+linters:
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - containedctx
+    - contextcheck
+    - cyclop
+    - decorder
+    - dogsled
+    - dupl
+    - durationcheck
+    - dupword
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - exhaustive
+    - exportloopref
+    - forbidigo
+    - forcetypeassert
+    - funlen
+    - gocheckcompilerdirectives
+    - gochecknoglobals
+    - gochecknoinits
+    - gochecksumtype
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - godox
+    - goerr113
+    - gofmt
+    - gofumpt
+    - goheader
+    - goimports
+    - gomnd
+    - gomoddirectives
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - grouper
+    - importas
+    - inamedparam
+    - interfacebloat
+    - ineffassign
+    - lll
+    - loggercheck
+    - maintidx
+    - mirror
+    - misspell
+    - nakedret
+    - nestif
+    - nilerr
+    - nilnil
+    - nlreturn
+    - noctx
+    - nolintlint
+    - nonamedreturns
+    - nosprintfhostport
+    - paralleltest
+    - perfsprint
+    - prealloc
+    - predeclared
+    - promlinter
+    - protogetter
+    - reassign
+    - revive
+    - sloglint
+    - sqlclosecheck
+    - staticcheck
+    - stylecheck
+    - tagalign
+    - tagliatelle
+    - tenv
+    - testifylint
+    - thelper
+    - tparallel
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - wastedassign 
+    - whitespace
+    - wrapcheck
+    - wsl
+    - zerologlint
+
+linters-settings:
+  # errcheck:
+  #   check-blank: true
+  #   disable-default-exclusions: true
+  errchkjson:
+    report-no-exported: true
+  dupl:
+    threshold: 120
+  tagliatelle:
+    case:
+      use-field-name: true
+      rules:
+        yaml: kebab
+  forbidigo:
+    forbid:
+      - 'time\.Sleep*(# Do not sleep)?'
+      - 'panic*(# Do not panic)?'
+      - 'os\.Exit*(# Do not exit)?'
+      - p: ^fmt\.Print*$
+        msg: Do not commit print statements.
+  funlen:
+    ignore-comments: true
+  gocognit:
+    min-complexity: 20
+  gocyclo:
+    min-complexity: 20
+  goconst:
+    numbers: true
+    min-occurrences: 3
+  grouper:
+    import-require-single-import: true
+  testifylint: 
+    enable-all: true
+  unparam:
+    check-exported: true
+  nolintlint:
+    require-explanation: true
+  maintidx:
+    under: 40
+  misspell:
+    locale: US
+  govet:
+    enable-all: true
+    disable:
+     - fieldalignment
+  lll:
+    line-length: 100
+    tab-width: 1
+  nlreturn:
+    block-size: 5
+  goimports:
+    local-prefixes: github.com/vladopajic/go-test-coverage/v2
+  tenv:
+    all: true
+  wsl:
+    force-err-cuddling: true
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - funlen      ## Function length is okay due to many tests cases
+        - wrapcheck   ## No need to check wrapping errors in tests
+        - maintidx    ## Test are okay to be long
+    
+    - linters:
+        - gosec
+      path: _test\.go
+      text: "G404"   ## allow weak rand in tests
+
+    - path: export_test\.go
+      linters:
+        - revive      ## Disabling linter because we intentionally want to use unexported types in tests
+        - gochecknoglobals ## Global values are useful when exporting functions
+    
+    - path: _test\.go   ## Enable dot-imports in tests
+      text: "dot-imports"
+      linters:
+        - revive
+  
+    - text: "require-error" ## Option to disable this error does not work
+      linters:
+        - testifylint
+    
+    - text: "do not define dynamic errors" ## dynamic errors are okay is this is simple tool
+      linters:
+        - goerr113
