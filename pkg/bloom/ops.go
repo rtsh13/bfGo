@@ -15,7 +15,7 @@ func (f *Filter) Insert(v []byte) {
 
 /*
 verifies the membership of the input in the bucket.
-To avoid false positives, since the likelyhood of the
+To avoid false positives, since the likelihood of the
 collision is unknown due to variable space, bits for
 all the calculated indexes are verified.
 */

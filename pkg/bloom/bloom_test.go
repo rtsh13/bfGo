@@ -40,6 +40,7 @@ func Test_MemberOf(t *testing.T) {
 			bloomFt.Insert(tt.input)
 			result := bloomFt.MemberOf(tt.input)
 			assert.Equalf(t, tt.expResult, result, "filter->memberOf")
+
 			continue
 		}
 
