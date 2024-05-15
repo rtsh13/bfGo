@@ -1,6 +1,6 @@
 package bloom
 
-// inserts the input to the bucket
+// inserts the input to the buckets
 func (f *Filter) Insert(v []byte) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
@@ -14,10 +14,9 @@ func (f *Filter) Insert(v []byte) {
 }
 
 /*
-verifies the membership of the input in the bucket.
-To avoid false positives, since the likelihood of the
-collision is unknown due to variable space, bits for
-all the calculated indexes are verified.
+verifies the membership of the input in the buckets.
+To avoid false +ve, since the likelihood of the collision is
+unknown due to variable space, we defer to total membership check.
 */
 func (f *Filter) MemberOf(v []byte) bool {
 	f.mu.Lock()
@@ -34,7 +33,7 @@ func (f *Filter) MemberOf(v []byte) bool {
 	return true
 }
 
-// flushes all the set bits in the bucket
+// flushes all the set bits in the buckets
 func (f *Filter) Flush() {
 	f.bucket = f.bucket.ClearAll()
 }
