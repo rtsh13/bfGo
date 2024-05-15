@@ -13,9 +13,10 @@ func main() {
 
 	input := make([]string, 0)
 
-	/*
-		POSITIVE FLOW
-	*/
+	//////////////////////////
+	//		  insertion in BF
+	/////////////////////////
+	fmt.Println()
 	for i := 0; i < 5; i++ {
 		value := uuid.NewString()
 		bloomInput, _ := json.Marshal(value)
@@ -24,22 +25,20 @@ func main() {
 		input = append(input, value)
 	}
 
+	//////////////////////////
+	//		 membership check
+	/////////////////////////
+	fmt.Println()
 	for i := 0; i < 5; i++ {
 		bloomInput, _ := json.Marshal(input[i])
-		if !ft.MemberOf(bloomInput) {
-			fmt.Printf("\nmembership does not exist for key : [%v]", input[i])
-		} else {
-			fmt.Printf("\nmembership does exist for key : [%v]", input[i])
-		}
+		fmt.Printf("\nmembership : [%v] for key : [%v]", ft.MemberOf(bloomInput), input[i])
 	}
 
-	/*
-		POSSIBLY NEGATIVE FLOW
-	*/
-	bloomInput, _ := json.Marshal(uuid.NewString())
-	if !ft.MemberOf(bloomInput) {
-		fmt.Printf("\nmembership does not exist for key : [%v]", uuid.NewString())
-	} else {
-		fmt.Printf("\nmembership does exist for key : [%v]", uuid.NewString())
-	}
+	//////////////////////////
+	//	   new key membership
+	/////////////////////////
+	fmt.Println()
+	key := uuid.NewString()
+	bloomInput, _ := json.Marshal(key)
+	fmt.Printf("\nmembership : [%v] for key : [%v]", ft.MemberOf(bloomInput), key)
 }
