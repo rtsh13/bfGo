@@ -20,7 +20,7 @@ func (f *Filter) Insert(v []byte) {
 			continue
 		}
 
-		f.freqHashMap[k] = f.freqHashMap[k] + 1
+		f.freqHashMap[k]++
 	}
 }
 

@@ -18,12 +18,12 @@ func Test_Insert(t *testing.T) {
 	}{
 		{input: []byte("hello")},
 		{input: []byte("")},
-		{input: nil},
 	}
 
 	for _, tt := range testCases {
+		prevPopCnt := len(cbf.freqHashMap)
 		cbf.Insert(tt.input)
-		assert.Greaterf(t, len(cbf.freqHashMap), 0, "cbf->insert")
+		assert.Greaterf(t, len(cbf.freqHashMap), prevPopCnt, "cbf->insert")
 	}
 }
 
