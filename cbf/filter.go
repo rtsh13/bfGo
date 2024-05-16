@@ -1,4 +1,4 @@
-package countingBloom
+package countingbloom
 
 import (
 	"sync"
