@@ -6,14 +6,14 @@ import (
 	"github.com/bits-and-blooms/bitset"
 )
 
-type Filter struct {
-	mu     sync.Mutex     // exclusive lock for reads and writes
-	size   uint           // length of the bucket
+type filter struct {
+	mu     sync.RWMutex   // exclusive lock for reads and writes
+	size   uint           // count of buckets
 	bucket *bitset.BitSet // equivalent hashmap
 }
 
-func New(options ...func(*Filter)) *Filter {
-	bf := &Filter{mu: sync.Mutex{}, size: 0, bucket: nil}
+func New(options ...func(*filter)) *filter {
+	bf := &filter{mu: sync.RWMutex{}, size: 0, bucket: nil}
 
 	for _, apply := range options {
 		apply(bf)
@@ -22,8 +22,8 @@ func New(options ...func(*Filter)) *Filter {
 	return bf
 }
 
-func WithSize(n uint) func(*Filter) {
-	return func(f *Filter) {
+func WithSize(n uint) func(*filter) {
+	return func(f *filter) {
 		f.size = n
 		bSet := bitset.New(n)
 		f.bucket = bSet

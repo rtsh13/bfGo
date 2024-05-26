@@ -6,7 +6,7 @@ import (
 )
 
 // inserts the input to the buckets
-func (f *Filter) Insert(v []byte) {
+func (f *filter) Insert(v []byte) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 
@@ -26,7 +26,7 @@ verifies the membership of the input in the buckets.
 To avoid false +ve, since the likelihood of the collision is
 unknown due to variable space, we defer to total membership check.
 */
-func (f *Filter) MemberOf(v []byte) bool {
+func (f *filter) MemberOf(v []byte) bool {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 
@@ -45,11 +45,11 @@ func (f *Filter) MemberOf(v []byte) bool {
 }
 
 // flushes all the set bits in the buckets
-func (f *Filter) Flush() {
+func (f *filter) Flush() {
 	f.bucket = f.bucket.ClearAll()
 }
 
-// Count (number of set bits). Also known as "popcount" or "population count".
-func (f *Filter) PopCnt() uint {
+// count (number of set bits). Also known as "popcount" or "population count".
+func (f *filter) PopCnt() uint {
 	return f.bucket.Count()
 }
