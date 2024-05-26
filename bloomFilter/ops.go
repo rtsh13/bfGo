@@ -1,11 +1,19 @@
 package bloom
 
+import (
+	"github.com/rtsh13/bfGo/hash"
+	"github.com/rtsh13/bfGo/indexing"
+)
+
 // inserts the input to the buckets
 func (f *Filter) Insert(v []byte) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 
-	indexes := f.hashToBitsetIdx(v)
+	fnvH := hash.Fnv1a(v)
+	seg1, seg2 := hash.Murmum3_128(v)
+
+	indexes := indexing.ModuloBiasing([]uint{fnvH, seg1, seg2}, f.size)
 
 	for _, idx := range indexes {
 		// set bit to true for the given idx
@@ -22,7 +30,10 @@ func (f *Filter) MemberOf(v []byte) bool {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 
-	indexes := f.hashToBitsetIdx(v)
+	fnvH := hash.Fnv1a(v)
+	seg1, seg2 := hash.Murmum3_128(v)
+
+	indexes := indexing.ModuloBiasing([]uint{fnvH, seg1, seg2}, f.size)
 
 	for _, idx := range indexes {
 		if !f.bucket.Test(idx) {
