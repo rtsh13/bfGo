@@ -1,37 +1,42 @@
-package countingBloom
+package countingbloom
 
 import (
 	"sync"
 	"time"
+
+	bfgo "github.com/rtsh13/bfGo"
+	"github.com/rtsh13/bfGo/errors"
 )
 
-const (
-	cbfSize = 10 ^ 5
-)
-
-type Filter struct {
-	mu             sync.Mutex
+type filter struct {
+	mu             sync.RWMutex
 	size           uint
 	freqHashMap    map[uint]int
 	lastVacuumedAt time.Time
 }
 
-func New(options ...func(*Filter)) *Filter {
-	bf := &Filter{mu: sync.Mutex{}, size: 0, freqHashMap: make(map[uint]int, 0)}
+type Options func(*filter) error
 
-	for _, apply := range options {
-		apply(bf)
+func New(opts ...Options) (*filter, error) {
+	bf := &filter{mu: sync.RWMutex{}, size: 0, freqHashMap: make(map[uint]int, 0)}
+
+	for _, apply := range opts {
+		if err := apply(bf); err != nil {
+			return nil, err
+		}
 	}
 
-	return bf
+	return bf, nil
 }
 
-func WithSize(n uint) func(*Filter) {
-	return func(f *Filter) {
-		if n <= 1 {
-			n = cbfSize
+func WithSize(m uint) Options {
+	return func(f *filter) error {
+		if m <= bfgo.MinimumBloomFSize {
+			return errors.BloomSize{Size: m}
 		}
 
-		f.size = n
+		f.size = m
+
+		return nil
 	}
 }

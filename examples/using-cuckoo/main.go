@@ -3,13 +3,18 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/google/uuid"
-	cbf "github.com/rtsh13/bfGo/cbf"
+	cuckoo "github.com/rtsh13/bfGo/cuckooFilter"
 )
 
 func main() {
-	ft, _ := cbf.New(cbf.WithSize(100000))
+	cf, err := cuckoo.New(cuckoo.WithSize(100, 4), cuckoo.WithKicks(5))
+	if err != nil {
+		log.Fatalf("error : [%v] in initializing filter", err.Error())
+		return
+	}
 
 	input := make([]string, 0)
 
@@ -21,7 +26,10 @@ func main() {
 		value := uuid.NewString()
 		bloomInput, _ := json.Marshal(value)
 		fmt.Printf("\nkey : [%v] inserted", value)
-		ft.Insert(bloomInput)
+		if !cf.Insert(bloomInput) {
+			fmt.Printf("\n at full capacity to insert : [%v]", bloomInput)
+		}
+
 		input = append(input, value)
 	}
 
@@ -31,7 +39,7 @@ func main() {
 	fmt.Println()
 	for i := 0; i < 5; i++ {
 		bloomInput, _ := json.Marshal(input[i])
-		fmt.Printf("\nmembership : [%v] for key : [%v]", ft.MemberOf(bloomInput), input[i])
+		fmt.Printf("\nmembership : [%v] for key : [%v]", cf.MemberOf(bloomInput), input[i])
 	}
 
 	///////////////////////////////////////////
@@ -41,7 +49,15 @@ func main() {
 	for i := 0; i < 5; i++ {
 		bloomInput, _ := json.Marshal(input[i])
 		fmt.Printf("\nkey : [%v] deleted", input[i])
-		ft.Delete(bloomInput)
-		fmt.Printf("\nmembership : [%v] for key : [%v]", ft.MemberOf(bloomInput), input[i])
+		cf.Delete(bloomInput)
+	}
+
+	///////////////////////////////////////////
+	// 				MEMBERSHIP
+	///////////////////////////////////////////
+	fmt.Println()
+	for i := 0; i < 5; i++ {
+		bloomInput, _ := json.Marshal(input[i])
+		fmt.Printf("\nmembership : [%v] for key : [%v]", cf.MemberOf(bloomInput), input[i])
 	}
 }

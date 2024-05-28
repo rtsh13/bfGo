@@ -1,4 +1,4 @@
-package countingBloom
+package countingbloom
 
 import (
 	"time"
@@ -8,7 +8,7 @@ import (
 )
 
 // inserts the input to the CBF
-func (f *Filter) Insert(v []byte) {
+func (f *filter) Insert(v []byte) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 
@@ -20,7 +20,7 @@ func (f *Filter) Insert(v []byte) {
 			continue
 		}
 
-		f.freqHashMap[k] = f.freqHashMap[k] + 1
+		f.freqHashMap[k]++
 	}
 }
 
@@ -29,7 +29,7 @@ verifies the membership of the input in the CBF.
 To avoid false +ve, since the likelihood of the collision is
 unknown due to variable space, we defer to total membership check.
 */
-func (f *Filter) MemberOf(v []byte) bool {
+func (f *filter) MemberOf(v []byte) bool {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 
@@ -50,7 +50,7 @@ of the keys calculated via hashing the input. To avoid Negative
 Counts, we verify the last frequency for the key and delete it
 if the count is approaching 0.
 */
-func (f *Filter) Delete(v []byte) {
+func (f *filter) Delete(v []byte) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 
@@ -69,7 +69,7 @@ func (f *Filter) Delete(v []byte) {
 }
 
 // flushes all the keys and their frequencies and updates the vacuum time
-func (f *Filter) Flush() {
+func (f *filter) Flush() {
 	f.mu.Lock()
 	f.freqHashMap = map[uint]int{}
 	f.lastVacuumedAt = time.Now().UTC()
@@ -89,7 +89,7 @@ This is deliberately done to minimize the false +ve resulted by collisions.
 
 	NOTE: However they are still prone to false +ve if the size is too small
 */
-func (f *Filter) hashToFMap(v []byte) []uint {
+func (f *filter) hashToFMap(v []byte) []uint {
 	var (
 		m3seg1, m3seg2 = hash.Murmum3_128(v)
 		hashes         = make([]uint, 0)

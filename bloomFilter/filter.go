@@ -4,28 +4,39 @@ import (
 	"sync"
 
 	"github.com/bits-and-blooms/bitset"
+	bfgo "github.com/rtsh13/bfGo"
+	"github.com/rtsh13/bfGo/errors"
 )
 
-type Filter struct {
-	mu     sync.Mutex     // exclusive lock for reads and writes
-	size   uint           // length of the bucket
+type Options func(*filter) error
+
+type filter struct {
+	mu     sync.RWMutex   // exclusive lock for reads and writes
+	m      uint           // count of buckets
 	bucket *bitset.BitSet // equivalent hashmap
 }
 
-func New(options ...func(*Filter)) *Filter {
-	bf := &Filter{mu: sync.Mutex{}, size: 0, bucket: nil}
+func New(options ...Options) (*filter, error) {
+	bf := &filter{mu: sync.RWMutex{}, m: 0, bucket: nil}
 
 	for _, apply := range options {
-		apply(bf)
+		if err := apply(bf); err != nil {
+			return nil, err
+		}
 	}
 
-	return bf
+	return bf, nil
 }
 
-func WithSize(n uint) func(*Filter) {
-	return func(f *Filter) {
-		f.size = n
-		bSet := bitset.New(n)
-		f.bucket = bSet
+func WithSize(m uint) Options {
+	return func(f *filter) error {
+		if m <= bfgo.MinimumBloomFSize {
+			return errors.BloomSize{Size: m}
+		}
+
+		f.m = m
+		f.bucket = bitset.New(m)
+
+		return nil
 	}
 }
