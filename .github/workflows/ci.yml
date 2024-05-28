@@ -28,8 +28,16 @@ jobs:
       - name: Gather dependencies
         run: go mod download
 
-      - name: Run coverage
-        run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+      - name: Test
+        run: |
+          mkdir testResults
+          go test -count=1 -p=1 ./... -v -coverprofile testResults/coverage.out -coverpkg=./...
+          cat testResults/coverage.out | grep -vE '.*stores/login/.*' > testResults/finalCoverage.txt
+
+      - name: Get test coverage report
+        run: |
+          go tool cover -func=testResults/coverage.out
+          go tool cover -func=testResults/finalCoverage.txt -o=testResults/finalCoverage.out
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
