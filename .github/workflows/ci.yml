@@ -32,7 +32,7 @@ jobs:
         run: |
           mkdir testResults
           go test -count=1 -p=1 ./... -v -coverprofile testResults/coverage.out -coverpkg=./...
-          cat testResults/coverage.out | grep -vE '.*stores/login/.*' > testResults/finalCoverage.txt
+          cat testResults/coverage.out | grep -vE '.*examples/.*' | grep -vE '.*benchmarks/.*' > testResults/finalCoverage.txt
 
       - name: Get test coverage report
         run: |
