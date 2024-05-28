@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	cf, err := cuckoo.New(cuckoo.WithSize(10, 4), cuckoo.WithKicks(5))
+	cf, err := cuckoo.New(cuckoo.WithSize(100, 4), cuckoo.WithKicks(5))
 	if err != nil {
 		log.Fatalf("error : [%v] in initializing filter", err.Error())
 		return

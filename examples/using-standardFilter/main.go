@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	ft := bloomFt.New(bloomFt.WithSize(100))
+	ft, _ := bloomFt.New(bloomFt.WithSize(100))
 
 	input := make([]string, 0)
 

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	ft := cbf.New(cbf.WithSize(100000))
+	ft, _ := cbf.New(cbf.WithSize(100000))
 
 	input := make([]string, 0)
 

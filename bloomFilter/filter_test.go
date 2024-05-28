@@ -10,7 +10,7 @@ import (
 func Test_Insert(t *testing.T) {
 	t.Parallel()
 
-	bloomFt := New(WithSize(10))
+	bloomFt, _ := New(WithSize(10))
 
 	preSetPopCnt := bloomFt.PopCnt()
 	bloomFt.Insert([]byte("hi"))
@@ -22,7 +22,7 @@ func Test_Insert(t *testing.T) {
 func Test_MemberOf(t *testing.T) {
 	t.Parallel()
 
-	bloomFt := New(WithSize(10))
+	bloomFt, _ := New(WithSize(10))
 
 	testCases := []struct {
 		key       int
@@ -52,7 +52,7 @@ func Test_MemberOf(t *testing.T) {
 func Test_Flush(t *testing.T) {
 	t.Parallel()
 
-	bloomFt := New(WithSize(10))
+	bloomFt, _ := New(WithSize(10))
 
 	preSeed := bloomFt.PopCnt()
 	bloomFt.Insert([]byte("hi"))

@@ -13,7 +13,7 @@ func (f *filter) Insert(v []byte) {
 	fnvH := hash.Fnv1a(v)
 	seg1, seg2 := hash.Murmum3_128(v)
 
-	indexes := indexing.ModuloBiasing([]uint{fnvH, seg1, seg2}, f.size)
+	indexes := indexing.ModuloBiasing([]uint{fnvH, seg1, seg2}, f.m)
 
 	for _, idx := range indexes {
 		// set bit to true for the given idx
@@ -33,7 +33,7 @@ func (f *filter) MemberOf(v []byte) bool {
 	fnvH := hash.Fnv1a(v)
 	seg1, seg2 := hash.Murmum3_128(v)
 
-	indexes := indexing.ModuloBiasing([]uint{fnvH, seg1, seg2}, f.size)
+	indexes := indexing.ModuloBiasing([]uint{fnvH, seg1, seg2}, f.m)
 
 	for _, idx := range indexes {
 		if !f.bucket.Test(idx) {

@@ -93,8 +93,9 @@ func (f *filter) BucketPop() uint {
 
 // during collision upon insertion, we shall reallocate the existing fingerprint
 // to a new slot of a new bucket.
-// Open addressing will only happen a limited number of times(defined by kick size) to avoid excessive
-// computation. Incase an empty slot is not found we return false, else true
+// Open addressing will only happen a limited number of times(defined by kick size)
+// to avoid excessive computation. Incase an empty slot is not found we return false,
+// else true
 //
 //nolint:gosec // we are picking a deterministic bucket position and slot
 func (f *filter) openAddressing(fpVal uint, indexes []uint) bool {

@@ -1,8 +1,10 @@
 package cuckoo
 
 import (
-	"errors"
 	"sync"
+
+	bfgo "github.com/rtsh13/bfGo"
+	"github.com/rtsh13/bfGo/errors"
 )
 
 const (
@@ -45,8 +47,12 @@ func New(opts ...Options) (*filter, error) {
 */
 func WithSize(m uint, n uint) Options {
 	return func(f *filter) error {
-		if m == 0 || n == 0 {
-			return errors.New(bucketSizeError)
+		if m <= bfgo.MinimumBloomFSize {
+			return errors.BloomSize{Size: m}
+		}
+
+		if n < 1 {
+			return errors.BloomSlots{Slot: n}
 		}
 
 		f.buckets = make([]table, m)
@@ -64,8 +70,8 @@ func WithSize(m uint, n uint) Options {
 // custom defined CF kick that allow maximum possible open addressing iterations/reallocations
 func WithKicks(k uint) Options {
 	return func(f *filter) error {
-		if k == 0 {
-			return errors.New(maxKickError)
+		if k < 1 {
+			return errors.BloomKicks{Kick: k}
 		}
 
 		f.kicks = k
