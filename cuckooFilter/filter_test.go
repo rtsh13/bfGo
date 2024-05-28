@@ -22,9 +22,9 @@ func Test_Insert(t *testing.T) {
 		assert.Equal(t, got, tt.want, "cuckoo->insert")
 	}
 
-	newbf, _ := New(WithSize(10, 4))
+	newbf, _ := New(WithSize(12, 4))
 
-	for range 9 {
+	for range 11 {
 		newbf.Insert([]byte("hi"))
 	}
 

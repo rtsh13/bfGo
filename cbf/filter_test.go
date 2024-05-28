@@ -30,7 +30,7 @@ func Test_Insert(t *testing.T) {
 func Test_MemberOf(t *testing.T) {
 	t.Parallel()
 
-	cbf, _ := New(WithSize(0))
+	cbf, _ := New(WithSize(100))
 
 	testCases := []struct {
 		key       int
@@ -60,7 +60,7 @@ func Test_MemberOf(t *testing.T) {
 func Test_Delete(t *testing.T) {
 	t.Parallel()
 
-	cbf, _ := New(WithSize(10))
+	cbf, _ := New(WithSize(100))
 
 	testCases := []struct {
 		input      []byte
@@ -81,7 +81,7 @@ func Test_Delete(t *testing.T) {
 func Test_Flush(t *testing.T) {
 	t.Parallel()
 
-	cbf, _ := New(WithSize(10))
+	cbf, _ := New(WithSize(100))
 
 	preSeed := len(cbf.freqHashMap)
 	cbf.Insert([]byte("hi"))
