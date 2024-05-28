@@ -1,0 +1,8 @@
+codecov:
+  enabled: true
+
+coverage:
+  # Specify the files and folders to exclude
+  exclude:
+    - "benchmarks/*"
+    - "examples/*"
