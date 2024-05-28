@@ -30,14 +30,13 @@ jobs:
 
       - name: Test
         run: |
-          mkdir testResults
-          go test -count=1 -p=1 ./... -v -coverprofile testResults/coverage.out -coverpkg=./...
-          cat testResults/coverage.out | grep -vE '.*examples/.*' | grep -vE '.*benchmarks/.*' > testResults/finalCoverage.txt
+          mkdir test
+          go test -count=1 -p=1 ./... -v -coverprofile test/coverage.out -coverpkg=./...
+          cat test/coverage.out | grep -vE '.*examples/.*' | grep -vE '.*benchmarks/.*' > test/finalCoverage.txt
 
       - name: Get test coverage report
         run: |
-          go tool cover -func=testResults/coverage.out
-          go tool cover -func=testResults/finalCoverage.txt -o=testResults/finalCoverage.out
+          go tool cover -func=test/finalCoverage.txt -o=test/finalCoverage.out
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
