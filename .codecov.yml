@@ -5,6 +5,4 @@ coverage:
   # Specify the files and folders to exclude
   exclude:
     - "examples/*"
-    - "**/main.go"
     - "benchmarks/*"
-    
