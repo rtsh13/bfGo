@@ -4,5 +4,5 @@ codecov:
 coverage:
   # Specify the files and folders to exclude
   exclude:
-    - "examples/*"
     - "benchmarks/*"
+    - "examples/*"
