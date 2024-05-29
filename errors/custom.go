@@ -7,7 +7,7 @@ type BloomSize struct {
 }
 
 func (i BloomSize) Error() string {
-	return fmt.Sprintf("invalid bloom filter size : [%v] provided", i.Size)
+	return fmt.Sprintf("invalid filter size : [%v] provided", i.Size)
 }
 
 type BloomKicks struct {
