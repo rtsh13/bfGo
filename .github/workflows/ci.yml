@@ -30,15 +30,19 @@ jobs:
 
       - name: Test
         run: |
-          mkdir test
-          go test -count=1 -p=1 ./... -v -coverprofile test/coverage.out -coverpkg=./...
-          cat test/coverage.out | grep -vE '.*examples/.*' | grep -vE '.*benchmarks/.*' > test/finalCoverage.txt
+          mkdir -p test
+          go test -count=1 -p=1 ./... -v -coverprofile=test/coverage.out -coverpkg=./...
+          grep -vE '.*examples/.*|.*benchmarks/.*' test/coverage.out > test/finalCoverage.txt
 
       - name: Get test coverage report
         run: |
           go tool cover -func=test/finalCoverage.txt -o=test/finalCoverage.out
+          cat test/finalCoverage.out
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          file: test/finalCoverage.txt
+          flags: unittests
+          fail_ci_if_error: true
