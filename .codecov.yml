@@ -1,0 +1,29 @@
+# codecov:
+#   enabled: true
+
+# coverage:
+#   # Specify the files and folders to exclude
+#   exclude:
+#     - "benchmarks/*"
+#     - "examples/*"
+
+codecov:
+  enabled: true
+
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+    patch:
+      default:
+        target: auto
+  
+  exclude:
+    - "benchmarks/*"
+    - "examples/*"
+    - "docs/*"
+    - "CODE_OF_CONDUCT.md"
+    - "CONTRIBUTING.md"
+    - "LICENSE"
+    - "README.md"
